@@ -51,7 +51,7 @@ class FreqConv_DW_fftifft(nn.Module):
             torch.arange(-(x.size(3)/2), (x.size(3)/2), requires_grad=True)[:, None].repeat(1, x.size(2)).unsqueeze(0)], dim=0).to(self.device)
         x = torch.fft.fftshift(torch.fft.fft2(x))
         weights = torch.complex(self.mlp_real(self.mask), self.mlp_imag(self.mask))
-        x = weights.cuda()*x
+        x = weights.to(self.device)*x
         return torch.fft.ifft2(torch.fft.ifftshift(x)).real 
     
     
@@ -102,7 +102,7 @@ class FreqConv_DW_ifft(nn.Module):
             torch.arange(-(x.size(2)/2), (x.size(2)/2), requires_grad=True)[None, :].repeat(x.size(3), 1).unsqueeze(0),
             torch.arange(-(x.size(3)/2), (x.size(3)/2), requires_grad=True)[:, None].repeat(1, x.size(2)).unsqueeze(0)], dim=0).to(self.device)
         weights = torch.complex(self.mlp_real(self.mask), self.mlp_imag(self.mask))
-        x = weights.cuda()*x
+        x = weights.to(self.device)*x
         return torch.fft.ifft2(torch.fft.ifftshift(x)).real 
     
 
